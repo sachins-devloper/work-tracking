@@ -16,10 +16,7 @@ app.use(express.json());
 const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://sachin:student123@cluster0.pgfrxp6.mongodb.net';
 console.log('🔗 Connecting to MongoDB...');
 
-mongoose.connect(mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+mongoose.connect(mongoURI)
 .then(() => {
   console.log('✅ Connected to MongoDB successfully');
   console.log(`📊 Database: ${mongoose.connection.name}`);
@@ -483,10 +480,25 @@ app.put('/profile/password', authenticateToken, [
 // Serve static files from React build
 if (process.env.NODE_ENV === 'production') {
   const path = require('path');
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
+  const frontendDistPath = path.join(__dirname, '../frontend/dist');
+  
+  console.log('📁 Frontend dist path:', frontendDistPath);
+  console.log('📁 Frontend dist exists:', require('fs').existsSync(frontendDistPath));
+  
+  app.use(express.static(frontendDistPath));
   
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+    console.log('🌐 Serving frontend for route:', req.path);
+    res.sendFile(path.join(frontendDistPath, 'index.html'));
+  });
+} else {
+  // Development mode - serve a simple message
+  app.get('/', (req, res) => {
+    res.json({ 
+      message: 'Team Activity Tracker API', 
+      mode: 'development',
+      frontend: 'Run npm run dev to start frontend'
+    });
   });
 }
 
@@ -495,5 +507,19 @@ app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`📊 Health check available at: http://localhost:${PORT}/health`);
+  
+  if (process.env.NODE_ENV === 'production') {
+    const frontendDistPath = require('path').join(__dirname, '../frontend/dist');
+    const fs = require('fs');
+    
+    if (fs.existsSync(frontendDistPath)) {
+      console.log('✅ Frontend build found - serving React app');
+      const files = fs.readdirSync(frontendDistPath);
+      console.log('📁 Frontend files:', files);
+    } else {
+      console.log('❌ Frontend build not found - check build process');
+    }
+  }
+  
   initializeAdmin();
 });

@@ -14,6 +14,7 @@
     "heroku-postbuild": "npm run build",
     "test": "node test-build.js",
     "test-build": "node test-build.js",
+    "verify-build": "node verify-build.js",
     "lint": "echo \"Linting not configured\" && exit 0"
   },
   "keywords": ["react", "nodejs", "mongodb", "activity-tracker", "team-management", "fullstack"],
