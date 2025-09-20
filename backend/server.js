@@ -72,10 +72,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true
       },
-      twitter: {
-        type: String,
-        trim: true
-      },
       website: {
         type: String,
         trim: true

@@ -18,7 +18,6 @@ const Profile = () => {
       socialLinks: {
         linkedin: '',
         github: '',
-        twitter: '',
         website: ''
       }
     },
@@ -52,7 +51,6 @@ const Profile = () => {
           socialLinks: {
             linkedin: response.data.profile?.socialLinks?.linkedin || '',
             github: response.data.profile?.socialLinks?.github || '',
-            twitter: response.data.profile?.socialLinks?.twitter || '',
             website: response.data.profile?.socialLinks?.website || ''
           }
         },
@@ -404,20 +402,7 @@ const Profile = () => {
                             placeholder="https://github.com/username"
                           />
                         </div>
-                        <div>
-                          <label htmlFor="twitter" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Twitter
-                          </label>
-                          <input
-                            type="url"
-                            id="twitter"
-                            name="socialLinks.twitter"
-                            className="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            value={formData.profile.socialLinks.twitter}
-                            onChange={handleProfileChange}
-                            placeholder="https://twitter.com/username"
-                          />
-                        </div>
+                        
                         <div>
                           <label htmlFor="website" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Website
