@@ -12,9 +12,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
+
 // Connect to MongoDB
-const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://sachin:student123@cluster0.pgfrxp6.mongodb.net';
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://sachin:student123@cluster0.pgfrxp6.mongodb.net/teamtracker?retryWrites=true&w=majority';
 console.log('🔗 Connecting to MongoDB...');
+console.log('🌐 MongoDB URI:', mongoURI.replace(/\/\/.*@/, '//***:***@')); // Hide credentials in logs
 
 mongoose.connect(mongoURI)
 .then(() => {
@@ -24,6 +31,8 @@ mongoose.connect(mongoURI)
 .catch(err => {
   console.error('❌ MongoDB connection error:', err.message);
   console.error('🔧 Please check your MONGODB_URI environment variable');
+  console.error('🔧 Make sure MongoDB Atlas allows connections from all IPs (0.0.0.0/0)');
+  console.error('🔧 Verify the database user has proper permissions');
   process.exit(1);
 });
 
@@ -197,8 +206,17 @@ app.get('/api/status', (req, res) => {
   });
 });
 
+// Test endpoint for API connectivity
+app.get('/api/test', (req, res) => {
+  res.json({ 
+    message: 'API is working!',
+    status: 'success',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Login
-app.post('/auth/login', [
+app.post('/api/auth/login', [
   body('username').notEmpty().withMessage('Username is required'),
   body('password').notEmpty().withMessage('Password is required')
 ], async (req, res) => {
@@ -241,7 +259,7 @@ app.post('/auth/login', [
 });
 
 // Create User (Admin only)
-app.post('/users', authenticateToken, requireAdmin, [
+app.post('/api/users', authenticateToken, requireAdmin, [
   body('username').notEmpty().withMessage('Username is required'),
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
   body('role').isIn(['admin', 'member']).withMessage('Role must be admin or member')
@@ -279,7 +297,7 @@ app.post('/users', authenticateToken, requireAdmin, [
 });
 
 // Get User Activities
-app.get('/activities', authenticateToken, async (req, res) => {
+app.get('/api/activities', authenticateToken, async (req, res) => {
   try {
     const activities = await Activity.find({ userId: req.user.userId })
       .sort({ date: -1 })
@@ -293,7 +311,7 @@ app.get('/activities', authenticateToken, async (req, res) => {
 });
 
 // Add Activity
-app.post('/activities', authenticateToken, [
+app.post('/api/activities', authenticateToken, [
   body('title').notEmpty().withMessage('Title is required'),
   body('description').notEmpty().withMessage('Description is required'),
   body('date').optional().isISO8601().withMessage('Invalid date format')
@@ -321,7 +339,7 @@ app.post('/activities', authenticateToken, [
 });
 
 // Get All Activities (Admin only)
-app.get('/admin/activities', authenticateToken, requireAdmin, async (req, res) => {
+app.get('/api/admin/activities', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { date, userId } = req.query;
     let query = {};
@@ -349,7 +367,7 @@ app.get('/admin/activities', authenticateToken, requireAdmin, async (req, res) =
 });
 
 // Get User Activities by User ID (Admin only)
-app.get('/admin/users/:userId/activities', authenticateToken, requireAdmin, async (req, res) => {
+app.get('/api/admin/users/:userId/activities', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { userId } = req.params;
     const { date } = req.query;
@@ -379,7 +397,7 @@ app.get('/admin/users/:userId/activities', authenticateToken, requireAdmin, asyn
 });
 
 // Get All Users (Admin only)
-app.get('/admin/users', authenticateToken, requireAdmin, async (req, res) => {
+app.get('/api/admin/users', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const users = await User.find({}, 'username role createdAt profile.email profile.mobile');
     res.json(users);
@@ -390,7 +408,7 @@ app.get('/admin/users', authenticateToken, requireAdmin, async (req, res) => {
 });
 
 // Get User Profile
-app.get('/profile', authenticateToken, async (req, res) => {
+app.get('/api/profile', authenticateToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.userId).select('-password');
     if (!user) {
@@ -404,7 +422,7 @@ app.get('/profile', authenticateToken, async (req, res) => {
 });
 
 // Update User Profile
-app.put('/profile', authenticateToken, [
+app.put('/api/profile', authenticateToken, [
   body('profile.email').optional().isEmail().withMessage('Invalid email format'),
   body('profile.mobile').optional().isLength({ min: 10, max: 15 }).withMessage('Mobile number must be between 10-15 characters'),
   body('profile.bio').optional().isLength({ max: 500 }).withMessage('Bio must be less than 500 characters'),
@@ -444,7 +462,7 @@ app.put('/profile', authenticateToken, [
 });
 
 // Change Password
-app.put('/profile/password', authenticateToken, [
+app.put('/api/profile/password', authenticateToken, [
   body('currentPassword').notEmpty().withMessage('Current password is required'),
   body('newPassword').isLength({ min: 6 }).withMessage('New password must be at least 6 characters')
 ], async (req, res) => {
