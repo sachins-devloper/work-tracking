@@ -138,9 +138,9 @@ const Login = () => {
             </div>
 
             <div className="text-center">
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              {/* <p className="text-xs text-gray-500 dark:text-gray-400">
                 Default Admin: admin / admin123
-              </p>
+              </p> */}
             </div>
           </form>
         </div>
