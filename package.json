@@ -1,0 +1,28 @@
+{
+  "name": "team-activity-tracker",
+  "version": "1.0.0",
+  "description": "Team Daily Activity Tracker - Full Stack Application",
+  "main": "server.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "postinstall": "npm run install-all",
+    "heroku-postbuild": "npm run build",
+    "test": "echo \"No tests specified\" && exit 0",
+    "lint": "echo \"Linting not configured\" && exit 0"
+  },
+  "keywords": ["react", "nodejs", "mongodb", "activity-tracker", "team-management", "fullstack"],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
