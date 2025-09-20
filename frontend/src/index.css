@@ -15,3 +15,115 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Custom Input Styles */
+@layer components {
+  .input-field {
+    @apply w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm transition-all duration-200 ease-in-out;
+    @apply bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400;
+    @apply focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent;
+    @apply hover:border-gray-400 dark:hover:border-gray-500;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-100 dark:disabled:bg-gray-800;
+  }
+  
+  .input-field:focus {
+    @apply ring-2 ring-indigo-500 ring-opacity-50 border-indigo-500;
+  }
+  
+  .input-field.error {
+    @apply border-red-500 focus:ring-red-500 focus:border-red-500;
+  }
+  
+  .textarea-field {
+    @apply input-field resize-none;
+    @apply min-h-[100px] max-h-[200px];
+  }
+  
+  .select-field {
+    @apply input-field appearance-none bg-no-repeat bg-right;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+  }
+  
+  .btn-primary {
+    @apply bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 ease-in-out;
+    @apply focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply shadow-sm hover:shadow-md;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-600 hover:bg-gray-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 ease-in-out;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply shadow-sm hover:shadow-md;
+  }
+  
+  .btn-success {
+    @apply bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 ease-in-out;
+    @apply focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply shadow-sm hover:shadow-md;
+  }
+  
+  .btn-danger {
+    @apply bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 ease-in-out;
+    @apply focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply shadow-sm hover:shadow-md;
+  }
+  
+  .card {
+    @apply bg-white dark:bg-gray-800 shadow-lg rounded-xl border border-gray-200 dark:border-gray-700;
+    @apply transition-all duration-200 ease-in-out;
+  }
+  
+  .card:hover {
+    @apply shadow-xl;
+  }
+  
+  .mobile-container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+  
+  .mobile-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6;
+  }
+  
+  .mobile-table {
+    @apply block sm:table w-full;
+  }
+  
+  .mobile-table thead {
+    @apply hidden sm:table-header-group;
+  }
+  
+  .mobile-table tbody {
+    @apply block sm:table-row-group;
+  }
+  
+  .mobile-table tr {
+    @apply block sm:table-row border border-gray-200 dark:border-gray-700 rounded-lg mb-4 sm:mb-0 sm:border-0;
+  }
+  
+  .mobile-table td {
+    @apply block sm:table-cell px-4 py-3 sm:px-6 sm:py-4;
+  }
+  
+  .mobile-table td:before {
+    @apply content-[attr(data-label)] font-medium text-gray-900 dark:text-white sm:hidden;
+  }
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 640px) {
+  .mobile-table td {
+    @apply border-b border-gray-200 dark:border-gray-700 last:border-b-0;
+  }
+  
+  .mobile-table td:before {
+    @apply block mb-1 text-sm text-gray-500 dark:text-gray-400;
+  }
+}

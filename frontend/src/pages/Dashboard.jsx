@@ -186,62 +186,79 @@ const Dashboard = () => {
 
           {/* Add Activity Form */}
           {showAddForm && (
-            <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6 mb-6">
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Add New Activity</h3>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-                  <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Title
-                  </label>
-                  <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    required
-                    className="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    value={formData.title}
-                    onChange={handleChange}
-                  />
+            <div className="card p-4 sm:p-6 mb-6">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Add New Activity</h3>
+                <button
+                  onClick={() => setShowAddForm(false)}
+                  className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                  <div className="sm:col-span-2">
+                    <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Activity Title
+                    </label>
+                    <input
+                      type="text"
+                      id="title"
+                      name="title"
+                      required
+                      className="input-field"
+                      placeholder="Enter activity title"
+                      value={formData.title}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="sm:col-span-2">
+                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Description
+                    </label>
+                    <textarea
+                      id="description"
+                      name="description"
+                      rows={4}
+                      required
+                      className="textarea-field"
+                      placeholder="Describe your activity..."
+                      value={formData.description}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Date
+                    </label>
+                    <input
+                      type="date"
+                      id="date"
+                      name="date"
+                      required
+                      className="input-field"
+                      value={formData.date}
+                      onChange={handleChange}
+                    />
+                  </div>
                 </div>
-                <div>
-                  <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Description
-                  </label>
-                  <textarea
-                    id="description"
-                    name="description"
-                    rows={3}
-                    required
-                    className="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    value={formData.description}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                    Date
-                  </label>
-                  <input
-                    type="date"
-                    id="date"
-                    name="date"
-                    required
-                    className="mt-1 block w-full border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    value={formData.date}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
                   <button
                     type="submit"
-                    className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+                    className="btn-success flex-1 sm:flex-none flex items-center justify-center"
                   >
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
                     Add Activity
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowAddForm(false)}
-                    className="bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
+                    className="btn-secondary flex-1 sm:flex-none"
                   >
                     Cancel
                   </button>
@@ -251,30 +268,53 @@ const Dashboard = () => {
           )}
 
           {/* Activities List */}
-          <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
+          <div className="card">
             <div className="px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">My Activities</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">My Activities</h3>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {activities.length} {activities.length === 1 ? 'activity' : 'activities'}
+                </span>
+              </div>
             </div>
-            <div className="px-4 sm:px-6 py-4">
+            <div className="p-4 sm:p-6">
               {loading ? (
-                <div className="text-center py-8">
-                  <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-                  <p className="mt-2 text-gray-600 dark:text-gray-400">Loading activities...</p>
+                <div className="text-center py-12">
+                  <div className="inline-block animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600"></div>
+                  <p className="mt-4 text-gray-600 dark:text-gray-400">Loading activities...</p>
                 </div>
               ) : activities.length === 0 ? (
-                <div className="text-center py-8">
-                  <p className="text-gray-600 dark:text-gray-400">No activities found. Add your first activity!</p>
+                <div className="text-center py-12">
+                  <div className="mx-auto h-16 w-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+                    <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No activities yet</h4>
+                  <p className="text-gray-600 dark:text-gray-400 mb-4">Start tracking your daily activities!</p>
+                  <button
+                    onClick={() => setShowAddForm(true)}
+                    className="btn-primary"
+                  >
+                    Add Your First Activity
+                  </button>
                 </div>
               ) : (
                 <div className="space-y-4">
                   {activities.map((activity) => (
-                    <div key={activity._id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow">
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h4 className="text-lg font-medium text-gray-900 dark:text-white">{activity.title}</h4>
-                          <p className="text-gray-600 dark:text-gray-400 mt-1 break-words">{activity.description}</p>
-                          <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
-                            {format(new Date(activity.date), 'MMM dd, yyyy')}
+                    <div key={activity._id} className="bg-gray-50 dark:bg-gray-700/50 border border-gray-200 dark:border-gray-600 rounded-xl p-4 sm:p-6 hover:shadow-md transition-all duration-200">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between mb-2">
+                            <h4 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white truncate pr-2">
+                              {activity.title}
+                            </h4>
+                            <span className="flex-shrink-0 text-sm text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded-full">
+                              {format(new Date(activity.date), 'MMM dd, yyyy')}
+                            </span>
+                          </div>
+                          <p className="text-gray-600 dark:text-gray-300 break-words leading-relaxed">
+                            {activity.description}
                           </p>
                         </div>
                       </div>
