@@ -13,12 +13,22 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://sachin:student123@cluster0.pgfrxp6.mongodb.net', {
+const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://sachin:student123@cluster0.pgfrxp6.mongodb.net';
+console.log('🔗 Connecting to MongoDB...');
+
+mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
+.then(() => {
+  console.log('✅ Connected to MongoDB successfully');
+  console.log(`📊 Database: ${mongoose.connection.name}`);
+})
+.catch(err => {
+  console.error('❌ MongoDB connection error:', err.message);
+  console.error('🔧 Please check your MONGODB_URI environment variable');
+  process.exit(1);
+});
 
 // User Schema
 const userSchema = new mongoose.Schema({
@@ -482,6 +492,8 @@ if (process.env.NODE_ENV === 'production') {
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`📊 Health check available at: http://localhost:${PORT}/health`);
   initializeAdmin();
 });
